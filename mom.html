@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vencedor - IPM</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <style>
+        #display {
+            font-size: 40px;
+            display: none;
+        }
+        button {
+            width: 25px;
+            height: 25px;
+            font-size: 0;
+            background-color: red;
+            border: 0;
+            border-radius: 35px;
+            margin: 18px;
+            outline: none;
+        }
+
+        .Rec{
+            animation-name: pulse;
+            animation-duration: 1.5s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+
+        @keyframes pulse{
+            0%{
+                box-shadow: 0px 0px 5px 0px rgba(173,0,0,.3);
+            }
+            65%{
+                box-shadow: 0px 0px 5px 13px rgba(173,0,0,.3);
+            }
+            90%{
+                box-shadow: 0px 0px 5px 13px rgba(173,0,0,0);
+            }
+        }
+    </style>
+    
+</head>
+<body>
+
+    
+
+
+    <div class="main">
+        <!-- Sing in  Form -->
+        <section class="sign-in" style="margin-top: 5%;">
+            
+            <div class="container">
+
+
+                <br/>
+                <a href="javascript:history.back()">Home</a>
+
+
+
+                <div class="signin-content">
+
+                    
+                    <div class="signin-image">
+                        <figure><img src="images/signin-image.jpg" alt="sing up image"></figure>
+                    </div>
+
+                    <div class="signin-form">
+                        <!-- <p id="display"><span id="seconds">00</span>:<span id="tens">00</span>
+                        </p> -->
+
+                        <span id="red-btn" style="float: right;display: none;"><button class="Rec">Recording</button></span>
+                    
+
+
+                        <h2 class="form-title">Capture MoM</h2>
+                            <div class="form-group">
+                                <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="your_name" id="title" placeholder="Enter Meeting Title"/>
+                            </div>
+                           
+                            <div class="form-group form-button">
+                                <input type="submit" name="Start Recording" id="start-record-btn" class="form-submit" value="Start/Pause Recording" style="width: 100%;"/>
+                            </div>
+                            <div class="form-group form-button">
+                                <!-- <input type="submit" name="Start Recording" id="stop-record-btn" class="form-submit" value="Pause Recording" style="width: 100%;"/> -->
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="Save Recording" id="save-note-btn" class="form-submit" value="Save Meeting" style="width: 100%;"/>
+                            </div>
+                        <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p>
+
+                        <p data-target="#exampleModal" data-toggle="modal" style="color: #007ec1;cursor: pointer;">I will upload a file instead<span ></span></p>
+
+                        
+ 
+                      
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+
+
+
+ 
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Upload Meeting File</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label style="margin-left: 30px;" for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                <input style="width: 50%;margin-left: 30px;" type="text" name="your_name" id="audio-title" placeholder="Enter Meeting Title"/>
+            </div>
+            <input style="border-bottom: none" id="audio-file" type="file" />
+
+            <h5 id="file-success" style="color: green;display: none;margin-left: 30px;" >File successfully Uploaded</h5>
+        </div>
+        <div class="modal-footer">
+          <button style="width: 50%;height: auto;" type="button" id="file-upload" class="btn btn-primary" >Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </div>
+
+    <!-- JS -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="js/mom.js"></script>
+</body>
+</html>
