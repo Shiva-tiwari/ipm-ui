@@ -1,3 +1,4 @@
+var sound = false;
 var decisionArrays = [];
 var globalResponseObject = {};
 let CONSTANT = {
@@ -40,14 +41,20 @@ callToAjaxForQuery = (data) => {
 		success: function (response) {
 			console.log("response", response);
 			globalResponseObject = response;
-			if (response.args) getBotResponse(response.args);
+			if (response.args) {
+        getBotResponse(response.args);
+        return;
+      }
 			if (q.toString().includes("last")) {
         // Get list of moms
 				var meetingList = response;
 				var htmlResponse = `<div class='bot-response-form' style = 'width: 100%; margin-top:20px '> `;
 				for (let i = 0; i < meetingList.length; i++) {
-					const element = meetingList[i]["summary"];
+					let element = meetingList[i]["summary"];
 					const time = meetingList[i]["dateCreated"];
+          if (!element) {
+            element = 'No record for that day';
+          }
 					htmlResponse += `<div>${element}<span style="color: blue;float: right">${time.substring(
 						0,
 						10
@@ -72,6 +79,7 @@ callToAjaxForQuery = (data) => {
 				msgerChat.insertAdjacentHTML("beforeend", msgHTML);
 
 				msgerChat.scrollTop += 500;
+        return;
 			} else {
         // query type is mom
 				var data = response.response;
@@ -105,6 +113,7 @@ callToAjaxForQuery = (data) => {
 				msgerChat.insertAdjacentHTML("beforeend", msgHTML);
 
 				msgerChat.scrollTop += 500;
+        return;
 			}
 		},
 		error: function (response) {
@@ -135,7 +144,10 @@ function getBotResponse(data) {
 		msgerChat.scrollTop += 500;
 	} else {
 		const msgText = "Please enter details";
-		readOutLoud(msgText);
+    if (sound == true) {
+      debugger;
+      readOutLoud(msgText);
+    }
 
 		createBotResponse(BOT_NAME, BOT_IMG, "left", msgText, data);
 	}
@@ -270,7 +282,9 @@ botResponseAfterFormSubmission = (name, img, side, text) => {
 	msgerChat.insertAdjacentHTML("beforeend", msgHTML);
 
 	msgerChat.scrollTop += 500;
-	readOutLoud(response);
+  if (sound) {
+    readOutLoud(response);
+  }
 };
 
 function userMessage(name, img, side, text) {
@@ -374,4 +388,18 @@ $("#mic").on("click", function (e) {
 		noteContent += " ";
 	}
 	recognition.start();
+});
+
+$('#sound-off').on('click', function(e) {
+  $('#sound-off').hide()
+  $('#sound-on').show();
+  sound = true;
+  console.log(sound);
+});
+
+$('#sound-on').on('click', function(e) {
+  $('#sound-on').hide()
+  $('#sound-off').show();
+  sound = false;
+  console.log(sound);
 });
