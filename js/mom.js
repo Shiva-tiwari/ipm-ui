@@ -49,16 +49,16 @@ recognition.onresult = function (event) {
         noteContent += transcript;
         // Save note to localStorage.
         // The key is the dateTime with seconds, the value is the content of the note.
-        saveNote(new Date().toLocaleString(), noteContent);
 
         // Reset variables and update UI.
-        noteContent = "";
+        //noteContent = "";
         //renderNotes(getAllNotes());
-        noteTextarea.val("");
+        //noteTextarea.val("");
 
-        showMessage("Meeting saved successfully.", "alert-success");
         // instructions.text("Meeting saved successfully.");
         // noteTextarea.val(noteContent);
+       // $('#final-note').append(transcript)
+        console.log(noteContent);
     }
 };
 
@@ -71,7 +71,8 @@ recognition.onstart = function () {
 };
 
 recognition.onspeechend = function () {
-    showMessage("You were quiet for a while so voice recognition turned itself off.", "alert-info");
+    showMessage("Thanks you meeting has been captured", "alert-info");
+
 
     // instructions.text(
     //     "You were quiet for a while so voice recognition turned itself off."
@@ -110,6 +111,18 @@ $("#pause-record-btn").on("click", function (e) {
     // instructions.text("Voice recognition paused.");
 });
 
+function startSaving() {
+    if (!noteContent.length) {
+        showMessage("Could not save empty note. Please add a message to your note.", "alert-danger");
+        //
+        // instructions.text(
+        //     "Could not save empty note. Please add a message to your note."
+        // );
+    } else {
+        saveNote(new Date().toLocaleString(), noteContent);
+    }
+}
+
 
 $("#save-note-btn").on("click", function (e) {
     $('#red-btn').hide();
@@ -117,13 +130,12 @@ $("#save-note-btn").on("click", function (e) {
     $('#start-record-btn').prop('value', 'Start Recording')
 
 
-    if (!noteContent.length) {
-        showMessage("Could not save empty note. Please add a message to your note.", "alert-danger");
-        //
-        // instructions.text(
-        //     "Could not save empty note. Please add a message to your note."
-        // );
-    }
+    //showMessage("Meeting saved successfully.", "alert-success");
+
+    setTimeout(startSaving, 3000)
+
+    
+
     // } else {
     // 	// Save note to localStorage.
     // 	// The key is the dateTime with seconds, the value is the content of the note.
@@ -137,23 +149,23 @@ $("#save-note-btn").on("click", function (e) {
     // }
 });
 
-notesList.on("click", function (e) {
-    e.preventDefault();
-    var target = $(e.target);
+// notesList.on("click", function (e) {
+//     e.preventDefault();
+//     var target = $(e.target);
 
-    // Listen to the selected note.
-    if (target.hasClass("listen-note")) {
-        var content = target.closest(".note").find(".content").text();
-        readOutLoud(content);
-    }
+//     // Listen to the selected note.
+//     if (target.hasClass("listen-note")) {
+//         var content = target.closest(".note").find(".content").text();
+//         readOutLoud(content);
+//     }
 
-    // Delete note.
-    if (target.hasClass("delete-note")) {
-        var dateTime = target.siblings(".date").text();
-        deleteNote(dateTime);
-        target.closest(".note").remove();
-    }
-});
+//     // Delete note.
+//     if (target.hasClass("delete-note")) {
+//         var dateTime = target.siblings(".date").text();
+//         deleteNote(dateTime);
+//         target.closest(".note").remove();
+//     }
+// });
 
 /*-----------------------------
       Speech Synthesis 
@@ -175,29 +187,30 @@ function readOutLoud(message) {
       Helper Functions 
 ------------------------------*/
 
-function renderNotes(notes) {
-    var html = "";
-    if (notes.length) {
-        notes.forEach(function (note) {
-            html += `<li class="note">
-        <p class="header">
-          <span class="date">${note.date}</span>
-          <a href="#" class="listen-note" title="Listen to Note">Listen to Note</a>
-          <a href="#" class="delete-note" title="Delete">Delete</a>
-        </p>
-        <p class="content">${note.content}</p>
-      </li>`;
-        });
-    } else {
-        html = '<li><p class="content">You don\'t have any notes yet.</p></li>';
-    }
-    notesList.html(html);
-}
+// function renderNotes(notes) {
+//     var html = "";
+//     if (notes.length) {
+//         notes.forEach(function (note) {
+//             html += `<li class="note">
+//         <p class="header">
+//           <span class="date">${note.date}</span>
+//           <a href="#" class="listen-note" title="Listen to Note">Listen to Note</a>
+//           <a href="#" class="delete-note" title="Delete">Delete</a>
+//         </p>
+//         <p class="content">${note.content}</p>
+//       </li>`;
+//         });
+//     } else {
+//         html = '<li><p class="content">You don\'t have any notes yet.</p></li>';
+//     }
+//     notesList.html(html);
+// }
 
 function saveNote(dateTime, content) {
     var title = $('#title').val();
     $('#title').val('');
 
+    console.log(content);
     jQuery.ajax({
         url: 'http://localhost:8080/ipm/meeting/save',
         headers: {
@@ -209,7 +222,7 @@ function saveNote(dateTime, content) {
         contentType: false,
         method: 'POST',
         success: function (data) {
-            alert(JSON.stringify(data.message));
+            showMessage(data.message, 'alert-success')
         }
     });
 

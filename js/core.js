@@ -33,8 +33,68 @@ try {
 	$(".app").hide();
 }
 
+function getBase64(file) {
+	var reader = new FileReader();
+	reader.readAsDataURL(file);
+	reader.onload = function () {
+	  console.log(reader.result);
+	  downloadBase64File(reader.result)
+	};
+	reader.onerror = function (error) {
+	  console.log('Error: ', error);
+	};
+ }
+
+ function downloadBase64File(base64Data) {
+	// const linkSource = `data:${contentType};base64,${base64Data}`;
+	console.log(base64Data);
+	const linkSource = base64Data;
+	//const downloadLink = document.createElement("a");
+	// downloadLink.setProperty('href', linkSource) ;
+	// downloadLink.setProperty('download',true);
+	var link = `<a href=${linkSource}  download="result.csv">Download "Some content" as a text file</a>`
+	$('body').append(link);
+	// downloadLink.click();
+}
+
+function sendCsv() {
+	var file = document.querySelector('#csv').files[0]
+	getBase64(file)
+	//downloadBase64File('text/csv', base64, 'name');
+}
+
 callToAjaxForQuery = (data) => {
 	var q = data;
+	const csvButton = `<button class="submit-request-bot" type="submit"  onclick="sendCsv()" style = 'width: 30%; margin-top:5px; float:right; background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 12px;'> Submit </button>`;
+	const htmlResponse = '<input type=file id="csv"/>' + csvButton; 
+	if (q.includes('estima')) {
+		const msgHTML = `
+            <div class="msg left-msg">
+              <div class="msg-img" style="background-image: url(${BOT_IMG})"></div>
+        
+              <div class="msg-bubble">
+                <div class="msg-info">
+                  <div class="msg-info-name">${BOT_NAME}</div>
+                  <div class="msg-info-time">${formatDate(new Date())}</div>
+                </div>
+                <div class="msg-text">${htmlResponse}</div> 
+              </div>
+            </div>
+          `;
+
+		msgerChat.insertAdjacentHTML("beforeend", msgHTML);
+
+		msgerChat.scrollTop += 500;
+		return;
+	}
 	$.ajax({
 		url: CONSTANT.USER_REQUEST.URL + "/" + data,
 		type: CONSTANT.USER_REQUEST.TYPE,
