@@ -37,7 +37,7 @@ So, IPM is your personal **AI**, a tool from the future; for the future.
 
 ### Workflow
 
-<img height="480px" width="600px" src="mocks/geekCombat_flowDiagram.jpg">
+<img height="480px" width="1000px" src="mocks/geekCombat_flowDiagram.jpg">
 
 <hr>
 
