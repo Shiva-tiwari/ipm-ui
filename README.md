@@ -30,7 +30,7 @@ So, IPM is your personal **AI**, a tool from the future; for the future.
 ### Architectural diagram
 <img height="600px" width="800px" src="mocks/geekCombat_design1.jpg">
 <img height="480px" src="mocks/geekCombat_design2.jpg">
-<img height="550px" width="700px" src="mocks/geekCombat_design3.jpg">
+<img height="550px" width="1000px" src="mocks/geekCombat_design3.jpg">
 
 
 <hr>
