@@ -42,23 +42,24 @@ callToAjaxForQuery = (data) => {
 			console.log("response", response);
 			globalResponseObject = response;
 			if (response.args) {
-        getBotResponse(response.args);
-        return;
-      }
-			if (q.toString().includes("last")) {
-        // Get list of moms
+				getBotResponse(response.args);
+				return;
+			}
+			if (q.toString().includes("last") || q.toString().includes("latest")) {
+				// Get list of moms
 				var meetingList = response;
 				var htmlResponse = `<div class='bot-response-form' style = 'width: 100%; margin-top:20px '> `;
 				for (let i = 0; i < meetingList.length; i++) {
 					let element = meetingList[i]["summary"];
+					let head = meetingList[i]["title"];
 					const time = meetingList[i]["dateCreated"];
-          if (!element) {
-            element = 'No record for that day';
-          }
-					htmlResponse += `<div>${element}<span style="color: blue;float: right">${time.substring(
+					if (!element) {
+						element = "MoM pending to be generated";
+					}
+					htmlResponse += `<div class="mom-text"><span><b>${head}</b></span><span style="color: #579ffb;float: right;font-weight:bolder">${time.substring(
 						0,
 						10
-					)} </span></div><br/><br/>`;
+					)} </span><br/><span>${element}</span></div><br/>`;
 				}
 				htmlResponse += `</div>`;
 
@@ -79,19 +80,17 @@ callToAjaxForQuery = (data) => {
 				msgerChat.insertAdjacentHTML("beforeend", msgHTML);
 
 				msgerChat.scrollTop += 500;
-        return;
+				return;
 			} else {
-        // query type is mom
+				// query type is mom
 				var data = response.response;
 				var htmlResponse = `<div class='bot-response-form' style = 'width: 100%; margin-top:20px '> `;
 				for (let i = 0; i < data.length; i++) {
 					const text = data[i]["sentence"];
 					const percentage = data[i]["confidence"];
-          if(parseFloat(percentage) > 50.00) {
-            htmlResponse += `<div>${text}<span style="color: blue;float: right">${percentage} %</span></div><br/><br/>`;
-
-          }
-
+					if (parseFloat(percentage) > 50.0) {
+						htmlResponse += `<div>${text}<span style="color: blue;float: right">${percentage} %</span></div><br/><br/>`;
+					}
 				}
 
 				htmlResponse += `</div>`;
@@ -113,7 +112,7 @@ callToAjaxForQuery = (data) => {
 				msgerChat.insertAdjacentHTML("beforeend", msgHTML);
 
 				msgerChat.scrollTop += 500;
-        return;
+				return;
 			}
 		},
 		error: function (response) {
@@ -144,10 +143,10 @@ function getBotResponse(data) {
 		msgerChat.scrollTop += 500;
 	} else {
 		const msgText = "Please enter details";
-    if (sound == true) {
-      debugger;
-      readOutLoud(msgText);
-    }
+		if (sound == true) {
+			debugger;
+			readOutLoud(msgText);
+		}
 
 		createBotResponse(BOT_NAME, BOT_IMG, "left", msgText, data);
 	}
@@ -282,9 +281,9 @@ botResponseAfterFormSubmission = (name, img, side, text) => {
 	msgerChat.insertAdjacentHTML("beforeend", msgHTML);
 
 	msgerChat.scrollTop += 500;
-  if (sound) {
-    readOutLoud(response);
-  }
+	if (sound) {
+		readOutLoud(response);
+	}
 };
 
 function userMessage(name, img, side, text) {
@@ -390,16 +389,16 @@ $("#mic").on("click", function (e) {
 	recognition.start();
 });
 
-$('#sound-off').on('click', function(e) {
-  $('#sound-off').hide()
-  $('#sound-on').show();
-  sound = true;
-  console.log(sound);
+$("#sound-off").on("click", function (e) {
+	$("#sound-off").hide();
+	$("#sound-on").show();
+	sound = true;
+	console.log(sound);
 });
 
-$('#sound-on').on('click', function(e) {
-  $('#sound-on').hide()
-  $('#sound-off').show();
-  sound = false;
-  console.log(sound);
+$("#sound-on").on("click", function (e) {
+	$("#sound-on").hide();
+	$("#sound-off").show();
+	sound = false;
+	console.log(sound);
 });
